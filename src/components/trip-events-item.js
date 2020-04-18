@@ -1,4 +1,5 @@
-export const createTripPointItemTemplate = () => {
+export const createTripPointItemTemplate = (point) => {
+  const {} = point;
   return (
     `<li class="trip-events__item">
        <div class="event">
