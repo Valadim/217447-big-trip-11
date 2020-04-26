@@ -11,10 +11,9 @@ import {createTripPointListTemplate} from "./components/trip-events-list.js";
 import {createTripPointItemTemplate} from "./components/trip-events-item.js";
 import {generateFilters} from "./mock/filter.js";
 import {generatePoints} from "./mock/add-point.js";
-import {generateEventOffers} from "./const";
 import {generateEvent} from "./mock/event";
 
-const POINTS_COUNT = 5;
+const POINTS_COUNT = 20;
 
 const render = (container, template, place = `beforeEnd`) => {
   container.insertAdjacentHTML(place, template);
@@ -35,8 +34,8 @@ render(tripControls, createMenuTemplate());
 
 const filters = generateFilters();
 const points = generatePoints(POINTS_COUNT);
-const eventOffers = generateEventOffers();
-const eventsType = generateEvent();
+
+const events = generateEvent();
 
 render(tripControls, createFilterTemplate(filters));
 
@@ -44,7 +43,7 @@ const tripEvenSection = document.querySelector(`.trip-events`);
 
 render(tripEvenSection, createSortTemplate());
 
-render(tripEvenSection, createAddEventTemplate(eventsType));
+render(tripEvenSection, createAddEventTemplate(events));
 
 render(tripEvenSection, createTripDaysListTemplate());
 
@@ -57,5 +56,6 @@ render(tripDaysItem, createTripPointListTemplate());
 const tripPointList = document.querySelector(`.trip-events__list`);
 
 for (let i = 1; i < points.length; i++) {
-  render(tripPointList, createTripPointItemTemplate(eventOffers));
+  render(tripPointList, createTripPointItemTemplate(events));
 }
+

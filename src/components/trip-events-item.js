@@ -1,5 +1,3 @@
-import {TRANSFER_TYPE, ACTIVITY_TYPE, DESTINATION_CITY} from "../const";
-
 const createEventOfferMarkup = (title, price) => {
   return (
     `<li class="event__offer">
@@ -10,12 +8,13 @@ const createEventOfferMarkup = (title, price) => {
   );
 };
 
-export const createTripPointItemTemplate = (eventOffers) => {
+export const createTripPointItemTemplate = (event) => {
+  const {transfer, destination, date, eventOffers} = event;
   const offersNumber = Math.floor(Math.random() * eventOffers.length);
   const eventOfferMarkup = eventOffers.map((it) => createEventOfferMarkup(it.title, it.price)).slice(0, offersNumber).join(`\n`);
-  const destinationCity = DESTINATION_CITY[Math.floor(Math.random() * DESTINATION_CITY.length)];
-  const transferType = TRANSFER_TYPE[Math.floor(Math.random() * TRANSFER_TYPE.length)];
-  const date = `2019-03-18T`;
+  const destinationCity = destination[Math.floor(Math.random() * destination.length)];
+  const transferType = transfer[Math.floor(Math.random() * transfer.length)];
+  // const date = `2019-03-18T`;
   const startTime = `10:30`;
   const endTime = `11:00`;
   const eventDuration = `30M`;
@@ -30,9 +29,9 @@ export const createTripPointItemTemplate = (eventOffers) => {
 
          <div class="event__schedule">
            <p class="event__time">
-             <time class="event__start-time" datetime="${date}${startTime}">${startTime}</time>
+             <time class="event__start-time" datetime="${date}T${startTime}">${startTime}</time>
              —
-             <time class="event__end-time" datetime="${date}${endTime}">${endTime}</time>
+             <time class="event__end-time" datetime="${date}T${endTime}">${endTime}</time>
            </p>
            <p class="event__duration">${eventDuration}</p>
          </div>
