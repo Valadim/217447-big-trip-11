@@ -9,16 +9,14 @@ const createEventOfferMarkup = (title, price) => {
 };
 
 export const createTripPointItemTemplate = (event) => {
-  const {transfer, destination, date, eventOffers} = event;
+  const {transfer, destination, date, startTime, endTime, eventOffers} = event;
   const offersNumber = Math.floor(Math.random() * eventOffers.length);
   const eventOfferMarkup = eventOffers.map((it) => createEventOfferMarkup(it.title, it.price)).slice(0, offersNumber).join(`\n`);
   const destinationCity = destination[Math.floor(Math.random() * destination.length)];
   const transferType = transfer[Math.floor(Math.random() * transfer.length)];
-  // const date = `2019-03-18T`;
-  const startTime = `10:30`;
-  const endTime = `11:00`;
   const eventDuration = `30M`;
   const price = Math.floor(Math.random() * 100);
+
   return (
     `<li class="trip-events__item">
        <div class="event">

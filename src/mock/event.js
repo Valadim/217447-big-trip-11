@@ -1,4 +1,3 @@
-
 const DESTINATION_DESCRIPTION = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
   `Cras aliquet varius magna, non porta ligula feugiat eget.`,
@@ -6,6 +5,9 @@ const DESTINATION_DESCRIPTION = [
   `Aliquam id orci ut lectus varius viverra.`,
   `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
 ];
+const transferType = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`];
+const activityType = [`Check-in`, `Sightseeing`, `Restaurant`];
+const destinationCity = [`Amsterdam`, `Tacoma`, `Geneva`, `Miami`, `Saint Petersburg`];
 
 const generateEventOffers = () => {
   return [{
@@ -64,6 +66,47 @@ const generateEventOptions = () => {
   }];
 };
 
+const getRandomIntegerNumber = (min, max) => {
+  return min + Math.floor(Math.random() * (max - min));
+};
+
+const getRandomDate = () => {
+  const targetDate = new Date();
+  const sign = Math.random() > 0.5 ? 1 : -1;
+  const diffValue = sign * getRandomIntegerNumber(0, 8);
+
+  targetDate.setDate(targetDate.getDate() + diffValue);
+
+  return targetDate;
+};
+
+const castTimeFormat = (value) => {
+  return value < 10 ? `${value}` : String(value);
+};
+
+const formatTime = (date) => {
+  const hours = castTimeFormat(date.getHours() % 12);
+  const minutes = castTimeFormat(date.getMinutes());
+
+  return `${hours}:${minutes}`;
+};
+
+function formatDate(date) {
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear() % 100;
+  if (day < 10) {
+    day = `0` + day;
+  }
+  if (month < 10) {
+    month = `0` + month;
+  }
+  if (year < 10) {
+    year = `0` + year;
+  }
+  return day + `/` + month + `/` + year;
+}
+
 const createEventPhoto = () => {
   const rand = Math.floor(Math.random() * 5);
   const photos = [];
@@ -78,15 +121,20 @@ const createEventDescription = (array) => {
 };
 
 export const generateEvent = () => {
+  const dueDate = Math.random() > 0.5 ? null : getRandomDate();
+
   return {
-    transfer: [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`],
-    activity: [`Check-in`, `Sightseeing`, `Restaurant`],
-    destination: [`Amsterdam`, `Tacoma`, `Geneva`, `Miami`, `Saint Petersburg`],
+    transfer: transferType,
+    activity: activityType,
+    destination: destinationCity,
     description: createEventDescription(DESTINATION_DESCRIPTION),
-    date: `18/03/19`,
-    time: `00:00`,
+    date: formatDate(getRandomDate()),
+    time: formatTime(getRandomDate()),
+    startTime: `10:30`,
+    endTime: `11:24`,
     photo: createEventPhoto(),
     eventOffers: generateEventOffers(),
     eventOptions: generateEventOptions(),
+    dueDate,
   };
 };

@@ -15,6 +15,7 @@ import {generateEvent} from "./mock/event";
 
 const POINTS_COUNT = 20;
 
+
 const render = (container, template, place = `beforeEnd`) => {
   container.insertAdjacentHTML(place, template);
 };
@@ -34,6 +35,7 @@ render(tripControls, createMenuTemplate());
 
 const filters = generateFilters();
 const points = generatePoints(POINTS_COUNT);
+// const showingPointsCount = POINTS_COUNT;
 
 const events = generateEvent();
 
@@ -59,3 +61,6 @@ for (let i = 1; i < points.length; i++) {
   render(tripPointList, createTripPointItemTemplate(events));
 }
 
+// events.slice(1, showingPointsCount)
+//   .forEach((event) => render(tripPointList, createTripPointItemTemplate(event)));
+//
