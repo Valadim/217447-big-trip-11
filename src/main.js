@@ -10,11 +10,14 @@ import {createTripDaysItemTemplate} from "./components/trip-day-item.js";
 import {createTripPointListTemplate} from "./components/trip-events-list.js";
 import {createTripPointItemTemplate} from "./components/trip-events-item.js";
 import {generateFilters} from "./mock/filter.js";
-import {generatePoints} from "./mock/add-point.js";
-import {generateEvent} from "./mock/event";
+import {generateEvents} from "./mock/add-event.js";
+import {generateMenuItems} from "./mock/menu";
+import {TRIP_INFO} from "./const";
 
+
+const tripMainInfo = TRIP_INFO;
 const POINTS_COUNT = 20;
-
+const mainMenu = generateMenuItems();
 
 const render = (container, template, place = `beforeEnd`) => {
   container.insertAdjacentHTML(place, template);
@@ -26,18 +29,16 @@ render(tripMain, createTripInfoTemplate(), `afterBegin`);
 
 const tripInfo = tripMain.querySelector(`.trip-info`);
 
-render(tripInfo, createTripInfoMainTemplate());
-render(tripInfo, createTripCostTemplate());
+render(tripInfo, createTripInfoMainTemplate(tripMainInfo.route, tripMainInfo.dateRange));
+render(tripInfo, createTripCostTemplate(tripMainInfo.cost));
 
 const tripControls = tripMain.querySelector(`.trip-controls`);
 
-render(tripControls, createMenuTemplate());
+render(tripControls, createMenuTemplate(mainMenu));
 
 const filters = generateFilters();
-const points = generatePoints(POINTS_COUNT);
-// const showingPointsCount = POINTS_COUNT;
-
-const events = generateEvent();
+const events = generateEvents(POINTS_COUNT);
+const showingPointsCount = POINTS_COUNT;
 
 render(tripControls, createFilterTemplate(filters));
 
@@ -45,22 +46,18 @@ const tripEvenSection = document.querySelector(`.trip-events`);
 
 render(tripEvenSection, createSortTemplate());
 
-render(tripEvenSection, createAddEventTemplate(events));
+render(tripEvenSection, createAddEventTemplate(events[0]));
 
 render(tripEvenSection, createTripDaysListTemplate());
 
 const tripDaysList = document.querySelector(`.trip-days`);
-render(tripDaysList, createTripDaysItemTemplate());
+render(tripDaysList, createTripDaysItemTemplate(tripMainInfo.tripDay, tripMainInfo.tripDate));
 
 const tripDaysItem = document.querySelector(`.trip-days__item`);
 render(tripDaysItem, createTripPointListTemplate());
 
 const tripPointList = document.querySelector(`.trip-events__list`);
 
-for (let i = 1; i < points.length; i++) {
-  render(tripPointList, createTripPointItemTemplate(events));
-}
+events.slice(1, showingPointsCount)
+  .forEach((event) => render(tripPointList, createTripPointItemTemplate(event)));
 
-// events.slice(1, showingPointsCount)
-//   .forEach((event) => render(tripPointList, createTripPointItemTemplate(event)));
-//

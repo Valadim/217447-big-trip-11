@@ -1,20 +1,22 @@
 const createTransferTypeMarkup = (name) => {
+  const className = name.toLowerCase();
   return (
     `<div class="event__type-item">
-       <input id="event-type-${name.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio"
-         name="event-type" value="${name.toLowerCase()}">
-       <label class="event__type-label  event__type-label--${name.toLowerCase()}" for="event-type-${name.toLowerCase()}-1">${name}</label>
+       <input id="event-type-${className}-1" class="event__type-input  visually-hidden" type="radio"
+         name="event-type" value="${className}">
+       <label class="event__type-label  event__type-label--${className}" for="event-type-${className}-1">${name}</label>
      </div>`
   );
 };
 
 const createActivityMarkup = (name) => {
+  const className = name.toLowerCase();
   return (
     `<div class="event__type-item">
-       <input id="event-type-${name.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio"
-         name="event-type" value="${name.toLowerCase()}">
-       <label class="event__type-label  event__type-label--${name.toLowerCase()}"
-         for="event-type-${name.toLowerCase()}-1">${name}</label>
+       <input id="event-type-${className}-1" class="event__type-input  visually-hidden" type="radio"
+         name="event-type" value="${className}">
+       <label class="event__type-label  event__type-label--${className}"
+         for="event-type-${className}-1">${name}</label>
      </div>`
   );
 };
