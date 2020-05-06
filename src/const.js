@@ -12,6 +12,8 @@ export const EVENT_INFO = {
   destinationCity: [`Amsterdam`, `Tacoma`, `Geneva`, `Miami`, `Saint Petersburg`],
 };
 
+export const SORT_ITEMS = [`Event`, `Time`, `Price`];
+
 export const EVENT_OFFERS = [{
   title: `Order Uber`,
   price: 20,

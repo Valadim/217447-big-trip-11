@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const createTransferTypeMarkup = (name) => {
   const className = name.toLowerCase();
   return (
@@ -40,7 +42,7 @@ const createOfferOptionsMarkup = (title, price, className, isChecked) => {
   );
 };
 
-export const createAddEventTemplate = (event) => {
+const createAddEventTemplate = (event) => {
   const {transfer, activity, destination, description, date, time, photo, eventOptions} = event;
 
   const transferTypeMarkup = transfer.map((it) => createTransferTypeMarkup(it)).join(`\n`);
@@ -126,3 +128,26 @@ export const createAddEventTemplate = (event) => {
           </form>`
   );
 };
+
+export default class EventEdit {
+  constructor(event) {
+    this._event = event;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createAddEventTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

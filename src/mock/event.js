@@ -25,12 +25,10 @@ const createEventPhoto = () => {
 };
 
 const createEventDescription = (array) => {
-  return (array.slice(Math.floor(Math.random() * array.length)));
+  return (array.slice(getRandomIntegerNumber(0, array.length)));
 };
 
 export const generateEvent = () => {
-  const dueDate = Math.random() > 0.5 ? null : getRandomDate();
-
   return {
     transfer: EVENT_INFO.transferType,
     activity: EVENT_INFO.activityType,
@@ -43,6 +41,10 @@ export const generateEvent = () => {
     photo: createEventPhoto(),
     eventOffers: EVENT_OFFERS,
     eventOptions: EVENT_OPTIONS,
-    dueDate,
+    price: getRandomIntegerNumber(10, 100),
+    eventDuration: getRandomIntegerNumber(10, 59) + `M`,
+    transferType: EVENT_INFO.transferType[getRandomIntegerNumber(0, EVENT_INFO.transferType.length)],
+    destinationCity: EVENT_INFO.destinationCity[getRandomIntegerNumber(0, EVENT_INFO.destinationCity.length)],
+    offersNumber: getRandomIntegerNumber(0, EVENT_OFFERS.length),
   };
 };
