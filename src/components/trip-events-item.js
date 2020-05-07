@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const createEventOfferMarkup = (title, price) => {
   return (
     `<li class="event__offer">
@@ -8,14 +10,9 @@ const createEventOfferMarkup = (title, price) => {
   );
 };
 
-export const createTripPointItemTemplate = (event) => {
-  const {transfer, destination, date, startTime, endTime, eventOffers} = event;
-  const offersNumber = Math.floor(Math.random() * eventOffers.length);
+const createEventItemTemplate = (event) => {
+  const {date, startTime, endTime, eventOffers, price, eventDuration, destinationCity, transferType, offersNumber} = event;
   const eventOfferMarkup = eventOffers.map((it) => createEventOfferMarkup(it.title, it.price)).slice(0, offersNumber).join(`\n`);
-  const destinationCity = destination[Math.floor(Math.random() * destination.length)];
-  const transferType = transfer[Math.floor(Math.random() * transfer.length)];
-  const eventDuration = `30M`;
-  const price = Math.floor(Math.random() * 100);
 
   return (
     `<li class="trip-events__item">
@@ -50,3 +47,26 @@ export const createTripPointItemTemplate = (event) => {
      </li>`
   );
 };
+
+export default class EventItem {
+  constructor(event) {
+    this._event = event;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEventItemTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
