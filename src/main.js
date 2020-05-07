@@ -17,7 +17,48 @@ import {TABS} from "./mock/tabs";
 import {FILTER_ITEMS} from "./mock/filter";
 
 const POINTS_COUNT = 20;
-const events = generateEvents(POINTS_COUNT);
+
+const renderEvent = (eventListElement, event) => {
+  const onEditButtonClick = () => {
+    eventListElement.replaceChild(eventEditComponent.getElement(), eventComponent.getElement());
+  };
+
+  const onEditFormSubmit = (evt) => {
+    evt.preventDefault();
+    eventListElement.replaceChild(eventComponent.getElement(), eventEditComponent.getElement());
+  };
+
+  const eventComponent = new EventItemComponent(event);
+  const editButton = eventComponent.getElement().querySelector(`.event__rollup-btn`);
+  editButton.addEventListener(`click`, onEditButtonClick);
+
+  const eventEditComponent = new EventEditComponent(event);
+  const editForm = eventEditComponent.getElement().querySelector(`.event__save-btn`);
+  editForm.addEventListener(`click`, onEditFormSubmit);
+
+  // const editForm = eventEditComponent.getElement().querySelector(`form`);
+  // editForm.addEventListener(`submit`, onEditFormSubmit);
+};
+
+const renderEventsList = (tripEventsSection, events) => {
+
+  render(tripEventsSection, new SortComponent().getElement(), RenderPosition.AFTERBEGIN);
+
+  render(tripEventsSection, new DaysListComponent().getElement(), RenderPosition.BEFOREEND);
+  const tripDaysList = document.querySelector(`.trip-days`);
+  render(tripDaysList, new DaysItemComponent(TRIP_INFO).getElement(), RenderPosition.BEFOREEND);
+
+  const tripDaysItem = document.querySelector(`.trip-days__item`);
+  render(tripDaysItem, new EventsListComponent().getElement(), RenderPosition.BEFOREEND);
+
+  const tripEventsList = document.querySelector(`.trip-events__list`);
+
+  // events.slice(0, POINTS_COUNT)
+  //   .forEach((event) => render(tripEventsList, new EventItemComponent(event).getElement(), RenderPosition.BEFOREEND));
+
+  events.slice(0, POINTS_COUNT)
+    .forEach((event) => renderEvent(tripEventsList, event));
+};
 
 const tripMain = document.querySelector(`.trip-main`);
 render(tripMain, new TripInfoComponent().getElement(), RenderPosition.AFTERBEGIN);
@@ -33,20 +74,7 @@ render(tripControls, new TripTabsComponent(TABS).getElement(), RenderPosition.AF
 render(tripControls, new FilterComponent(FILTER_ITEMS).getElement(), RenderPosition.BEFOREEND);
 
 const tripEvenSection = document.querySelector(`.trip-events`);
-render(tripEvenSection, new SortComponent().getElement(), RenderPosition.AFTERBEGIN);
 
-render(tripEvenSection, new EventEditComponent(events[0]).getElement(), RenderPosition.AFTERBEGIN);
+const events = generateEvents(POINTS_COUNT);
 
-render(tripEvenSection, new DaysListComponent().getElement(), RenderPosition.BEFOREEND);
-
-const tripDaysList = document.querySelector(`.trip-days`);
-render(tripDaysList, new DaysItemComponent(TRIP_INFO).getElement(), RenderPosition.BEFOREEND);
-
-const tripDaysItem = document.querySelector(`.trip-days__item`);
-render(tripDaysItem, new EventsListComponent().getElement(), RenderPosition.BEFOREEND);
-
-const tripEventsList = document.querySelector(`.trip-events__list`);
-
-events.slice(1, POINTS_COUNT)
-  .forEach((event) => render(tripEventsList, new EventItemComponent(event).getElement(), RenderPosition.BEFOREEND));
-
+renderEventsList(tripEvenSection, events);
