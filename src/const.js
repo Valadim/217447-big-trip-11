@@ -6,6 +6,8 @@ export const DESTINATION_DESCRIPTION = [
   `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
 ];
 
+export const DESTINATION_CITY = [`Amsterdam`, `Tacoma`, `Geneva`, `Miami`, `Saint Petersburg`];
+
 export const EVENT_INFO = {
   transferType: [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`],
   activityType: [`Check-in`, `Sightseeing`, `Restaurant`],

@@ -1,5 +1,15 @@
-import {DESTINATION_DESCRIPTION, EVENT_INFO, EVENT_OFFERS, EVENT_OPTIONS} from "../const.js";
+import {DESTINATION_DESCRIPTION, DESTINATION_CITY, EVENT_INFO, EVENT_OFFERS, EVENT_OPTIONS} from "../const.js";
 import {formatTime, formatDate} from "../utils";
+
+const OFFERS_TITLE = [`Add luggage`, `Switch to comfort class`, `Add meal`, `Choose seats`, `Travel by train`];
+
+const OFFERS_TYPE = [`taxi`, `bus`, `train`, `ship`, `transport`, `drive`, `flight`, `check-in`, `sightseeing`, `restaurant`];
+
+const getRandomArrayItem = (array) => {
+  const randomIndex = getRandomIntegerNumber(0, array.length);
+
+  return array[randomIndex];
+};
 
 const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min));
@@ -15,36 +25,66 @@ const getRandomDate = () => {
   return targetDate;
 };
 
-const createEventPhoto = () => {
-  const rand = Math.floor(Math.random() * 5);
-  const photos = [];
-  for (let i = 0; i <= rand; i++) {
-    photos.push(`<img class="event__photo" src="http://picsum.photos/248/152?r=${Math.random()}" alt="Event photo">`);
+const EVENT_PHOTO_COUNT = 5;
+const EVENT_OFFERS_COUNT = 5;
+
+// const createEventPhoto = () => {
+//   const rand = Math.floor(Math.random() * EVENT_PHOTO_COUNT);
+//   const photos = [];
+//   for (let i = 0; i <= rand; i++) {
+//     photos.push(`<img class="event__photo" src="http://picsum.photos/248/152?r=${Math.random()}" alt="Event photo">`);
+//   }
+//   return photos;
+// };
+
+const generateEventPhoto = (count) => {
+  const rand = Math.floor(Math.random() * count);
+  const eventPhotos = [];
+  for (let i = 0; i < rand; i++) {
+    eventPhotos.push({
+      description: getRandomArrayItem(DESTINATION_DESCRIPTION),
+      src: `http://picsum.photos/248/152?r=${Math.random()}`,
+    });
   }
-  return photos;
+  return eventPhotos;
 };
 
-const createEventDescription = (array) => {
-  return (array.slice(getRandomIntegerNumber(0, array.length)));
+const generateOffers = (count) => {
+    const rand = Math.floor(Math.random() * count);
+    const eventOffers = [];
+    for (let i = 0; i < rand; i++) {
+      eventOffers.push({
+        title: getRandomArrayItem(OFFERS_TITLE),
+        price: getRandomIntegerNumber(10, 200),
+      });
+    }
+    return eventOffers;
+  }
+;
+
+
+
+
+export const generatePoint = () => {
+  return ({
+    basePrice: getRandomIntegerNumber(100, 2000),
+    dateFrom: getRandomDate().toISOString(),
+    dateTo: getRandomDate().toISOString(),
+    destination: {
+      description: getRandomArrayItem(DESTINATION_DESCRIPTION),
+      name: getRandomArrayItem(DESTINATION_CITY),
+      pictures: generateEventPhoto(EVENT_PHOTO_COUNT),
+    },
+    id: getRandomIntegerNumber(0, 10),
+    isFavorite: Math.random() > 0.5,
+    offers: generateOffers(EVENT_OFFERS_COUNT),
+    type: getRandomArrayItem(OFFERS_TYPE),
+  });
 };
 
-export const generateEvent = () => {
-  return {
-    transfer: EVENT_INFO.transferType,
-    activity: EVENT_INFO.activityType,
-    destination: EVENT_INFO.destinationCity,
-    description: createEventDescription(DESTINATION_DESCRIPTION),
-    date: formatDate(getRandomDate()),
-    time: formatTime(getRandomDate()),
-    startTime: formatTime(getRandomDate()),
-    endTime: formatTime(getRandomDate()),
-    photo: createEventPhoto(),
-    eventOffers: EVENT_OFFERS,
-    eventOptions: EVENT_OPTIONS,
-    price: getRandomIntegerNumber(10, 100),
-    eventDuration: getRandomIntegerNumber(10, 59) + `M`,
-    transferType: EVENT_INFO.transferType[getRandomIntegerNumber(0, EVENT_INFO.transferType.length)],
-    destinationCity: EVENT_INFO.destinationCity[getRandomIntegerNumber(0, EVENT_INFO.destinationCity.length)],
-    offersNumber: getRandomIntegerNumber(0, EVENT_OFFERS.length),
-  };
-};
+console.log(`start`);
+console.log(generatePoint().destination.pictures.src);
+console.log(generatePoint());
+console.log(generateOffers(EVENT_OFFERS_COUNT));
+
+console.log(`start1`);

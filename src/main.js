@@ -53,11 +53,11 @@ const renderEventsList = (tripEventsSection, events) => {
 
   const tripEventsList = document.querySelector(`.trip-events__list`);
 
-  // events.slice(0, POINTS_COUNT)
-  //   .forEach((event) => render(tripEventsList, new EventItemComponent(event).getElement(), RenderPosition.BEFOREEND));
-
   events.slice(0, POINTS_COUNT)
-    .forEach((event) => renderEvent(tripEventsList, event));
+    .forEach((event) => render(tripEventsList, new EventItemComponent(event).getElement(), RenderPosition.BEFOREEND));
+
+  // events.slice(0, POINTS_COUNT)
+  //   .forEach((event) => renderEvent(tripEventsList, event));
 };
 
 const tripMain = document.querySelector(`.trip-main`);
