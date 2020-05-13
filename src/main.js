@@ -41,7 +41,7 @@ const renderEvent = (eventListElement, event) => {
   eventListElement.appendChild(eventComponent.getElement());
 };
 
-const renderEventsList = (eventsSection, events) => {
+const renderEventsList = (eventsSection, points) => {
   render(eventsSection, new SortComponent().getElement(), RenderPosition.AFTERBEGIN);
   render(eventsSection, new DaysListComponent().getElement(), RenderPosition.BEFOREEND);
 
@@ -53,7 +53,7 @@ const renderEventsList = (eventsSection, events) => {
 
   const tripEventsList = document.querySelector(`.trip-events__list`);
 
-  events.slice(0, POINTS_COUNT)
+  points.slice(0, POINTS_COUNT)
     .forEach((event) => renderEvent(tripEventsList, event));
 };
 

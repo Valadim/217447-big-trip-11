@@ -73,8 +73,8 @@ const createEventEditTemplate = (event) => {
   const description = destination.description;
   const favorite = createFavoriteMarkup(isFavorite);
 
-  const beginTime = dateFrom.split('T')[0];
-  const endTime = dateTo.split('T')[0];
+  const beginTime = dateFrom.split(`T`)[0];
+  const endTime = dateTo.split(`T`)[0];
 
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post" id="event-edit-form">

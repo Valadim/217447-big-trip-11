@@ -1,5 +1,5 @@
 import {DESTINATION_DESCRIPTION, DESTINATION_CITY, OFFERS_TITLE, OFFERS_TYPE} from "../const.js";
-import {formatTime, formatDate} from "../utils";
+// import {formatTime, formatDate} from "../utils";
 
 const getRandomArrayItem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);

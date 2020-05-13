@@ -14,8 +14,8 @@ const createEventItemTemplate = (event) => {
   const {basePrice, dateFrom, dateTo, destination, offers, type} = event;
   const eventOfferMarkup = offers.map((it) => createEventOfferMarkup(it.title, it.price)).join(`\n`);
 
-  const beginTime = dateFrom.split('T')[1].slice(0, 5);
-  const endTime = dateTo.split('T')[1].slice(0, 5);
+  const beginTime = dateFrom.split(`T`)[1].slice(0, 5);
+  const endTime = dateTo.split(`T`)[1].slice(0, 5);
 
   const typeTitle = type.charAt(0).toUpperCase() + type.slice(1);
 
