@@ -17,7 +17,19 @@ import {TABS} from "./mock/tabs";
 import {FILTER_ITEMS} from "./mock/filter";
 
 const POINTS_COUNT = 20;
-const events = generateEvents(POINTS_COUNT);
+
+const events = generateEvents(POINTS_COUNT).sort((a, b) => (a.dateFrom < b.dateFrom) ? -1 : ((a.dateFrom > b.dateFrom) ? 1 : 0));
+
+const eventDays = {};
+
+events.forEach((event) => {
+  const eventDate = event.dateFrom.slice(0, 10);
+
+  if (!eventDays[eventDate]) {
+    eventDays[eventDate] = [];
+  }
+  eventDays[eventDate].push(event);
+});
 
 const renderEvent = (eventListElement, event) => {
   const onEditButtonClick = () => {
@@ -38,23 +50,34 @@ const renderEvent = (eventListElement, event) => {
   const editForm = eventEditComponent.getElement();
   editForm.addEventListener(`submit`, onEditFormSubmit);
 
-  eventListElement.appendChild(eventComponent.getElement());
+  render(eventListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
-const renderEventsList = (eventsSection, points) => {
+
+const renderEventsList = (eventsSection, eventDays) => {
   render(eventsSection, new SortComponent().getElement(), RenderPosition.AFTERBEGIN);
   render(eventsSection, new DaysListComponent().getElement(), RenderPosition.BEFOREEND);
 
   const tripDaysList = document.querySelector(`.trip-days`);
-  render(tripDaysList, new DaysItemComponent(TRIP_INFO).getElement(), RenderPosition.BEFOREEND);
 
-  const tripDaysItem = document.querySelector(`.trip-days__item`);
-  render(tripDaysItem, new EventsListComponent().getElement(), RenderPosition.BEFOREEND);
+  Object.keys(eventDays).forEach((event, i) => {
+    i++;
+    render(tripDaysList, new DaysItemComponent(event, i).getElement(), RenderPosition.BEFOREEND);
+  });
 
-  const tripEventsList = document.querySelector(`.trip-events__list`);
+  const tripDaysItem = document.querySelectorAll(`.trip-days__item`);
 
-  points.slice(0, POINTS_COUNT)
-    .forEach((event) => renderEvent(tripEventsList, event));
+  for (let day of tripDaysItem) {
+    render(day, new EventsListComponent().getElement(), RenderPosition.BEFOREEND);
+  }
+
+  const tripEventsList = document.querySelectorAll(`.trip-events__list`);
+
+  Object.keys(eventDays).forEach((event, i) => {
+    eventDays[event].forEach((it) => {
+      renderEvent(tripEventsList[i], it);
+    });
+  });
 };
 
 const tripMain = document.querySelector(`.trip-main`);
@@ -72,4 +95,5 @@ render(tripControls, new FilterComponent(FILTER_ITEMS).getElement(), RenderPosit
 
 const tripEvenSection = document.querySelector(`.trip-events`);
 
-renderEventsList(tripEvenSection, events);
+renderEventsList(tripEvenSection, eventDays);
+
