@@ -60,7 +60,9 @@ const renderEventsList = (eventsSection, eventDays) => {
 
   const tripDaysList = document.querySelector(`.trip-days`);
 
-  Object.keys(eventDays).forEach((event, i) => {
+  const eventDaysKeys = Object.keys(eventDays);
+
+  eventDaysKeys.forEach((event, i) => {
     i++;
     render(tripDaysList, new DaysItemComponent(event, i).getElement(), RenderPosition.BEFOREEND);
   });
@@ -73,7 +75,7 @@ const renderEventsList = (eventsSection, eventDays) => {
 
   const tripEventsList = document.querySelectorAll(`.trip-events__list`);
 
-  Object.keys(eventDays).forEach((event, i) => {
+  eventDaysKeys.forEach((event, i) => {
     eventDays[event].forEach((it) => {
       renderEvent(tripEventsList[i], it);
     });
