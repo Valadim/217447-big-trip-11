@@ -1,25 +1,29 @@
 import {createElement} from "../utils.js";
 
-const createTripDaysItemTemplate = (date) => {
-  const {tripDay, tripDate} = date;
+const createTripDaysItemTemplate = (eventDate, day) => {
+  // const {dateFrom} = event;
+
+  const pointDate = new Date(eventDate).toLocaleString(`en-US`, {month: `long`, day: `numeric`});
+
   return (
     `<li class="trip-days__item  day">
        <div class="day__info">
-         <span class="day__counter">${tripDay}</span>
-         <time class="day__date" datetime="2019-03-18">${tripDate}</time>
+         <span class="day__counter">${day}</span>
+         <time class="day__date" datetime="2019-03-18">${pointDate}</time>
        </div>
      </li>`
   );
 };
 
 export default class DaysItem {
-  constructor(date) {
-    this._date = date;
+  constructor(event, day) {
+    this._event = event;
+    this._day = day;
     this._element = null;
   }
 
   getTemplate() {
-    return createTripDaysItemTemplate(this._date);
+    return createTripDaysItemTemplate(this._event, this._day);
   }
 
   getElement() {
