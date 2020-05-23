@@ -1,7 +1,6 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 const createTripDaysItemTemplate = (eventDate, day) => {
-  // const {dateFrom} = event;
 
   const pointDate = new Date(eventDate).toLocaleString(`en-US`, {month: `long`, day: `numeric`});
 
@@ -15,26 +14,15 @@ const createTripDaysItemTemplate = (eventDate, day) => {
   );
 };
 
-export default class DaysItem {
+export default class DaysItem extends AbstractComponent {
   constructor(event, day) {
+    super();
+
     this._event = event;
     this._day = day;
-    this._element = null;
   }
 
   getTemplate() {
     return createTripDaysItemTemplate(this._event, this._day);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -21,14 +21,6 @@ export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
 };
-
-// export const dateDiff = (date1, date2) => {
-//   const firstDate = Date.parse(date1);
-//   const secondDate = Date.parse(date2);
-//   const diff = firstDate - secondDate;
-//   return diff;
-// };
-
 export const createElement = (template) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = template;

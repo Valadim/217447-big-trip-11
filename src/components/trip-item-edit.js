@@ -1,4 +1,5 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
+
 import {DESTINATION_CITY, OFFERS_TYPE} from "../const";
 
 const createEventTypeMarkup = (name, id) => {
@@ -89,14 +90,14 @@ const createEventEditTemplate = (event) => {
                 <div class="event__type-list">
                   <fieldset class="event__type-group">
                     <legend class="visually-hidden">Transfer</legend>
-                    ${eventType}                    
+                    ${eventType}
                   </fieldset>
-                 
+
                   <fieldset class="event__type-group">
                     <legend class="visually-hidden">Activity</legend>
                     ${activityType}
                   </fieldset>
-                  
+
                 </div>
               </div>
 
@@ -136,7 +137,7 @@ const createEventEditTemplate = (event) => {
             </header>
             <section class="event__details">
               <section class="event__section  event__section--offers">
-                <h3 class="event__section-title  event__section-title--offers">Offers</h3>                            
+                <h3 class="event__section-title  event__section-title--offers">Offers</h3>
                 <div class="event__available-offers">
                   ${eventOptionMarkup}
                 </div>
@@ -157,25 +158,19 @@ const createEventEditTemplate = (event) => {
   );
 };
 
-export default class EventEdit {
+export default class EventEdit extends AbstractComponent {
   constructor(event) {
+    super();
+
     this._event = event;
-    this._element = null;
   }
 
   getTemplate() {
     return createEventEditTemplate(this._event);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setSubmitHandler(handler) {
+    this.getElement().addEventListener(`submit`, handler);
   }
 }
+

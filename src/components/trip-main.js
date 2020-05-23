@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component";
 
 const createTripInfoMainTemplate = (tripInfo) => {
   const {route, dateRange} = tripInfo;
@@ -10,25 +10,14 @@ const createTripInfoMainTemplate = (tripInfo) => {
   );
 };
 
-export default class TripInfoMain {
+export default class TripInfoMain extends AbstractComponent {
   constructor(tripInfo) {
+    super();
+
     this._tripInfo = tripInfo;
-    this._element = null;
   }
 
   getTemplate() {
     return createTripInfoMainTemplate(this._tripInfo);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
