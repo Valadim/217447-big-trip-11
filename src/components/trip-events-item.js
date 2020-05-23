@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component";
 
 const createEventOfferMarkup = (title, price) => {
   return (
@@ -11,28 +11,33 @@ const createEventOfferMarkup = (title, price) => {
 };
 
 const createEventItemTemplate = (event) => {
-  const {date, startTime, endTime, eventOffers, price, eventDuration, destinationCity, transferType, offersNumber} = event;
-  const eventOfferMarkup = eventOffers.map((it) => createEventOfferMarkup(it.title, it.price)).slice(0, offersNumber).join(`\n`);
+  const {basePrice, dateFrom, dateTo, destination, offers, type} = event;
+  const eventOfferMarkup = offers.map((it) => createEventOfferMarkup(it.title, it.price)).join(`\n`);
+
+  const beginTime = dateFrom.split(`T`)[1].slice(0, 5);
+  const endTime = dateTo.split(`T`)[1].slice(0, 5);
+
+  const typeTitle = type.charAt(0).toUpperCase() + type.slice(1);
 
   return (
     `<li class="trip-events__item">
        <div class="event">
          <div class="event__type">
-           <img class="event__type-icon" width="42" height="42" src="img/icons/${transferType.toLowerCase()}.png" alt="Event type icon">
+           <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
          </div>
-         <h3 class="event__title">${transferType} to ${destinationCity}</h3>
+         <h3 class="event__title">${typeTitle} to ${destination.name}</h3>
 
          <div class="event__schedule">
            <p class="event__time">
-             <time class="event__start-time" datetime="${date}T${startTime}">${startTime}</time>
+             <time class="event__start-time" datetime="${dateFrom}">${beginTime}</time>
              —
-             <time class="event__end-time" datetime="${date}T${endTime}">${endTime}</time>
+             <time class="event__end-time" datetime="${dateTo}">${endTime}</time>
            </p>
-           <p class="event__duration">${eventDuration}</p>
+           <p class="event__duration">${`30M`}</p>
          </div>
 
          <p class="event__price">
-           €&nbsp;<span class="event__price-value">${price}</span>
+           €&nbsp;<span class="event__price-value">${basePrice}</span>
          </p>
 
          <h4 class="visually-hidden">Offers:</h4>
@@ -48,25 +53,19 @@ const createEventItemTemplate = (event) => {
   );
 };
 
-export default class EventItem {
+export default class EventItem extends AbstractComponent {
   constructor(event) {
+    super();
+
     this._event = event;
-    this._element = null;
   }
 
   getTemplate() {
     return createEventItemTemplate(this._event);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setEditButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, handler);
   }
 }

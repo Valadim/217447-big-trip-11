@@ -1,36 +1,28 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
-const createTripDaysItemTemplate = (date) => {
-  const {tripDay, tripDate} = date;
+const createTripDaysItemTemplate = (eventDate, day) => {
+
+  const pointDate = new Date(eventDate).toLocaleString(`en-US`, {month: `long`, day: `numeric`});
+
   return (
     `<li class="trip-days__item  day">
        <div class="day__info">
-         <span class="day__counter">${tripDay}</span>
-         <time class="day__date" datetime="2019-03-18">${tripDate}</time>
+         <span class="day__counter">${day}</span>
+         <time class="day__date" datetime="2019-03-18">${pointDate}</time>
        </div>
      </li>`
   );
 };
 
-export default class DaysItem {
-  constructor(date) {
-    this._date = date;
-    this._element = null;
+export default class DaysItem extends AbstractComponent {
+  constructor(event, day) {
+    super();
+
+    this._event = event;
+    this._day = day;
   }
 
   getTemplate() {
-    return createTripDaysItemTemplate(this._date);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+    return createTripDaysItemTemplate(this._event, this._day);
   }
 }

@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component";
 
 const createTabsMarkup = (tab, isChecked) => {
   return (
@@ -18,26 +18,14 @@ const createTabsTemplate = (tabsItem) => {
   );
 };
 
-export default class TripTabs {
+export default class TripTabs extends AbstractComponent {
   constructor(tabs) {
+    super();
+
     this._tabs = tabs;
-    this._element = null;
   }
 
   getTemplate() {
     return createTabsTemplate(this._tabs);
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }
-
