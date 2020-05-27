@@ -6,7 +6,6 @@ import TripTabsComponent from "./components/trip-tabs";
 import FilterComponent from "./components/trip-filters";
 
 import {TABS} from "./mock/tabs";
-import {FILTER_ITEMS} from "./mock/filter";
 import {TRIP_INFO} from "./const";
 import {render, RenderPosition} from "./utils/render.js";
 import {generateEvents} from "./mock/event.js";
@@ -46,7 +45,7 @@ render(tripInfo, new TripCostComponent(TRIP_INFO.cost), RenderPosition.BEFOREEND
 const tripControls = tripMain.querySelector(`.trip-controls`);
 render(tripControls, new TripTabsComponent(TABS), RenderPosition.AFTERBEGIN);
 
-render(tripControls, new FilterComponent(FILTER_ITEMS), RenderPosition.BEFOREEND);
+render(tripControls, new FilterComponent(), RenderPosition.BEFOREEND);
 
 const tripEvenSection = document.querySelector(`.trip-events`);
 

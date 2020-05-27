@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
 
 import {DESTINATION_CITY, OFFERS_TYPE} from "../const";
 
@@ -50,9 +50,9 @@ const createOfferOptionsMarkup = (title, price, id, isChecked) => {
   );
 };
 
-const createFavoriteMarkup = (isFavorite) => {
+const createFavoriteMarkup = (isActive = true) => {
   return (
-    `<input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite ? `checked` : ``}>
+    `<input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isActive ? `checked` : ``}>
      <label class="event__favorite-btn" for="event-favorite-1">
        <span class="visually-hidden">Add to favorite</span>
        <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -63,7 +63,7 @@ const createFavoriteMarkup = (isFavorite) => {
 };
 
 const createEventEditTemplate = (event) => {
-  const {dateFrom, dateTo, destination, isFavorite, offers} = event;
+  const {dateFrom, dateTo, destination, offers} = event;
 
   const eventType = OFFERS_TYPE.slice(0, OFFERS_TYPE.length - 3).map((title, i) => createEventTypeMarkup(title, i)).join(`\n`);
   const activityType = OFFERS_TYPE.slice(-3).map((title, i) => createActivityMarkup(title, i)).join(`\n`);
@@ -72,7 +72,7 @@ const createEventEditTemplate = (event) => {
   const eventOptionMarkup = offers.map((it, i) => createOfferOptionsMarkup(it.title, it.price, i, i === 0)).join(`\n`);
   const eventPhoto = destination.pictures.map((it) => createEventPhotoMarkup(it.src, it.description)).join(`\n`);
   const description = destination.description;
-  const favorite = createFavoriteMarkup(isFavorite);
+  const favorite = createFavoriteMarkup(!event.isFavorite);
 
   const beginTime = dateFrom.split(`T`)[0];
   const endTime = dateTo.split(`T`)[0];
@@ -158,19 +158,36 @@ const createEventEditTemplate = (event) => {
   );
 };
 
-export default class EventEdit extends AbstractComponent {
+export default class EventEdit extends AbstractSmartComponent {
   constructor(event) {
     super();
 
     this._event = event;
+    this._submitHandler = null;
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
     return createEventEditTemplate(this._event);
   }
 
+  recoveryListeners() {
+    this.setSubmitHandler(this._submitHandler);
+    this._subscribeOnEvents();
+  }
+
+  rerender() {
+    super.rerender();
+  }
+
   setSubmitHandler(handler) {
     this.getElement().addEventListener(`submit`, handler);
+    this._submitHandler = handler;
+  }
+
+  setFavoritesButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__favorite-btn`)
+      .addEventListener(`click`, handler);
   }
 }
 
