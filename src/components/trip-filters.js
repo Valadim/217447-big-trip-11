@@ -1,40 +1,69 @@
 import AbstractComponent from "./abstract-component";
 
-const createFilterMarkup = (filterItem, isChecked) => {
-  return (
-    `<div class="trip-filters__filter">
-       <input id="filter-${filterItem}"
-       class="trip-filters__filter-input  visually-hidden"
-       type="radio"
-       name="trip-filter"
-       value="${filterItem}"
-       ${isChecked ? `checked` : ``}>
-       <label class="trip-filters__filter-label" for="filter-${filterItem}">${filterItem}</label>
-     </div>`
-  );
+export const SortType = {
+  DATE_DOWN: `date-down`,
+  DATE_UP: `date-up`,
+  DEFAULT: `default`,
 };
 
-const createFilterTemplate = (filters) => {
-  const filterMarkup = filters.map((it, i) => createFilterMarkup(it, i === 0)).join(`\n`);
+const createFilterTemplate = () => {
   return (
     `<div>
        <h2 class="visually-hidden">Filter events</h2>
        <form class="trip-filters" action="#" method="get">
-         ${filterMarkup}
-         <button class="visually-hidden" type="submit">Accept filter</button>
-       </form>
+              <div class="trip-filters__filter">
+                <input data-sort-type="${SortType.DEFAULT}" id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything" checked="">
+                <label class="trip-filters__filter-label" for="filter-everything">Everything</label>
+              </div>
+
+              <div class="trip-filters__filter">
+                <input data-sort-type="${SortType.DATE_UP}" id="filter-future" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="future">
+                <label class="trip-filters__filter-label" for="filter-future">Future</label>
+              </div>
+
+              <div class="trip-filters__filter">
+                <input data-sort-type="${SortType.DATE_DOWN}" id="filter-past" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="past">
+                <label class="trip-filters__filter-label" for="filter-past">Past</label>
+              </div>
+
+              <button class="visually-hidden" type="submit">Accept filter</button>
+            </form>
      </div>`
   );
 };
 
 export default class Filter extends AbstractComponent {
-  constructor(filters) {
+  constructor() {
     super();
 
-    this._filters = filters;
+    this._currenSortType = SortType.DEFAULT;
   }
 
   getTemplate() {
-    return createFilterTemplate(this._filters);
+    return createFilterTemplate();
+  }
+
+  getSortType() {
+    return this._currenSortType;
+  }
+
+  setSortTypeChangeHandler(handler) {
+    this.getElement().addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+
+      if (evt.target.tagName !== `LABEL`) {
+        return;
+      }
+
+      const sortType = evt.target.dataset.sortType;
+
+      if (this._currenSortType === sortType) {
+        return;
+      }
+
+      this._currenSortType = sortType;
+
+      handler(this._currenSortType);
+    });
   }
 }
