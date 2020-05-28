@@ -8,7 +8,7 @@ import TripMainInfoComponent from './components/trip-main-info.js';
 import TripPointsLoadind from './components/trip-points-loading.js';
 import PointsModel from './models/points.js';
 import {renderElement, RenderPosition, remove} from './utils/render.js';
-import {MenuItem, MENU_ITEMS, FilterType, SortType} from './const.js';
+import {MENU_ITEM, MENU_ITEMS, FILTER_TYPE, SORT_TYPE} from './const.js';
 
 const api = new API();
 const pointsModel = new PointsModel();
@@ -39,16 +39,16 @@ newPointElement.addEventListener(`click`, () => {
     statsComponent.hide();
     tripController.show();
   }
-  menuComponent.setSelectedItem(MenuItem.TABLE);
-  filterController._onFilterChange(FilterType.EVERYTHING);
-  tripController._sortPoints(SortType.DEFAULT);
+  menuComponent.setSelectedItem(MENU_ITEM.TABLE);
+  filterController._onFilterChange(FILTER_TYPE.EVERYTHING);
+  tripController._sortPoints(SORT_TYPE.DEFAULT);
   tripController.createPoint();
 });
 
 menuComponent.setChangeHandler((menuItem) => {
   switch (menuItem) {
-    case MenuItem.TABLE:
-      menuComponent.setSelectedItem(MenuItem.TABLE);
+    case MENU_ITEM.TABLE:
+      menuComponent.setSelectedItem(MENU_ITEM.TABLE);
       statsComponent.hide();
       tripController.show();
       if (tripPointsLoading && tripController._noWaypointComponent) {
@@ -56,8 +56,8 @@ menuComponent.setChangeHandler((menuItem) => {
         renderElement(eventElement, tripPointsLoading);
       }
       break;
-    case MenuItem.STATS:
-      menuComponent.setSelectedItem(MenuItem.STATS);
+    case MENU_ITEM.STATS:
+      menuComponent.setSelectedItem(MENU_ITEM.STATS);
       statsComponent.show();
       tripController.hide();
       if (tripPointsLoading) {

@@ -2,7 +2,7 @@ import Point from './models/point.js';
 
 const AccessData = {
   END_POINT: `https://11.ecmascript.pages.academy/big-trip`,
-  AUTHORIZATION: `Basic gu3x317jxh1zi2e`
+  AUTHORIZATION: `Basic lsn75kzlg8492ns`
 };
 
 const Method = {
@@ -43,12 +43,12 @@ export default class API {
 
   getOffers() {
     return this._load({url: `offers`})
-      .then((response) => response.json());
+    .then((response) => response.json());
   }
 
   getDestinations() {
     return this._load({url: `destinations`})
-      .then((response) => response.json());
+    .then((response) => response.json());
   }
 
   updatePoint(id, data) {

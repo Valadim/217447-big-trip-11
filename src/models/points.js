@@ -1,13 +1,13 @@
 import {getPointsByFilter} from '../utils/filter.js';
 import {createOffersSet, createDestinationsSet} from '../utils/common.js';
-import {FilterType} from "../const.js";
+import {FILTER_TYPE} from "../const.js";
 
 export default class Points {
   constructor() {
     this._points = [];
     this._offersSet = {};
     this._destinationsSet = {};
-    this._activeFilterType = FilterType.EVERYTHING;
+    this._activeFilterType = FILTER_TYPE.EVERYTHING;
     this._dataChangeHandlers = [];
     this._filterChangeHandlers = [];
   }
