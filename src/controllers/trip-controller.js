@@ -11,7 +11,7 @@ import {enableComponent, disableComponent, getFullPrice} from '../utils/common.j
 
 const renderTrip = (points, offers, destinations, container, onDataChange, onViewChange, isDefaultSort = true) => {
   const pointControllers = [];
-  let dates = isDefaultSort
+  const dates = isDefaultSort
     ? [...new Set(points.map((it) => new Date(it.startDate).toDateString()))]
     : [``];
 

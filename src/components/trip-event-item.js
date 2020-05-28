@@ -5,7 +5,7 @@ import {POINT_TYPE_PRE_TEXT} from '../const.js';
 const timezoneCorrection = new Date().getTimezoneOffset() * 60 * 1000;
 
 const getDateDiff = (startDate, endDate) => {
-  let days = Math.floor(((endDate - startDate) / 86400000));
+  const days = Math.floor(((endDate - startDate) / 86400000));
   let hours = endDate - startDate > 0 ? 0 : 24;
   hours += Math.floor(((endDate - startDate) % 86400000) / 3600000);
   let minutes = endDate - startDate > 0 ? 0 : 60;
