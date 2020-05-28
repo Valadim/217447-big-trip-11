@@ -27,7 +27,7 @@ export const parseDate = (date) => {
   return moment(date).format(`DD MMM`);
 };
 
-const getWaypointsCost = (arr) => arr.reduce((acc, it) => parseInt(acc, 10) + parseInt(it.price, 10), 0);
+const getTripCost = (arr) => arr.reduce((acc, it) => parseInt(acc, 10) + parseInt(it.price, 10), 0);
 
 const getOffersCost = (arr) => {
   let sum = 0;
@@ -39,7 +39,7 @@ const getOffersCost = (arr) => {
 
 export const getFullPrice = (arr) => {
   const totalCostElement = document.querySelector(`.trip-info__cost-value`);
-  totalCostElement.textContent = getWaypointsCost(arr) + getOffersCost(arr);
+  totalCostElement.textContent = getTripCost(arr) + getOffersCost(arr);
 };
 
 export const disableComponent = (className) => {

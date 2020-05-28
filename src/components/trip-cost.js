@@ -1,21 +1,16 @@
-import AbstractComponent from "./abstract-component.js";
-
-const createTripCostTemplate = (cost) => {
-  return (
-    `<p class="trip-info__cost">
-       Total: &euro;&nbsp;<span class="trip-info__cost-value">${cost}</span>
-     </p>`
-  );
-};
+import AbstractComponent from './abstract-component.js';
 
 export default class TripCost extends AbstractComponent {
-  constructor(cost) {
+  constructor(points) {
     super();
-
-    this._cost = cost;
+    this._points = points;
   }
 
   getTemplate() {
-    return createTripCostTemplate(this._cost);
+    return (
+      `<p class="trip-info__cost">
+        Total: &euro;&nbsp;<span class="trip-info__cost-value"></span>
+      </p>`
+    );
   }
 }
