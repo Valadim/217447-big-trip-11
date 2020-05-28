@@ -1,19 +1,65 @@
-export const DESTINATION_DESCRIPTION = [
-  `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
-  `Cras aliquet varius magna, non porta ligula feugiat eget.`,
-  `Fusce tristique felis at fermentum pharetra.`,
-  `Aliquam id orci ut lectus varius viverra.`,
-  `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
+export const MENU_ITEM = {
+  TABLE: `table`,
+  STATS: `stats`
+};
+
+export const POINT_MODE = {
+  DEFAULT: `default`,
+  EDIT: `edit`,
+  ADDING: `adding`
+};
+
+export const FILTER_TYPE = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`
+};
+
+export const POINT_TYPE_PRE_TEXT = {
+  "taxi": `to`,
+  "bus": `to`,
+  "train": `to`,
+  "ship": `to`,
+  "transport": `to`,
+  "drive": `to`,
+  "flight": `to`,
+  "check-in": `in`,
+  "sightseeing": `in`,
+  "restaurant": `in`
+};
+
+export const SORT_TYPE = {
+  DEFAULT: `sort-event`,
+  TIME: `sort-time`,
+  PRICE: `sort-price`,
+};
+
+export const ACTIVITY_TYPES = [
+  `check-in`,
+  `sightseeing`,
+  `restaurant`
 ];
 
-export const DESTINATION_CITY = [`Amsterdam`, `Tacoma`, `Geneva`, `Miami`, `Saint Petersburg`];
-export const OFFERS_TITLE = [`Add luggage`, `Switch to comfort class`, `Add meal`, `Choose seats`, `Travel by train`];
-export const OFFERS_TYPE = [`taxi`, `bus`, `train`, `ship`, `transport`, `drive`, `flight`, `check-in`, `sightseeing`, `restaurant`];
+export const DESTINATION_UKNOWN = `We know nothing about this place.
+  Please select a destination from the dropdown list.`;
 
-export const TRIP_INFO = {
-  cost: Math.floor(Math.random() * 2000),
-  route: `Amsterdam — Miami — Geneva`,
-  dateRange: `MAR 09 — 21`,
-  tripDay: `1`,
-  tripDate: `29 April`,
-};
+export const MENU_ITEMS = [
+  {
+    name: `table`,
+    selected: true,
+  },
+  {
+    name: `stats`,
+    selected: false,
+  },
+];
+
+export const TRANSFER_TYPES = [
+  `taxi`,
+  `bus`,
+  `train`,
+  `ship`,
+  `transport`,
+  `drive`,
+  `flight`,
+];
