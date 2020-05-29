@@ -14,16 +14,16 @@ module.exports = {
     watchContentBase: true,
   },
   module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader']
-      }
-    ]
-  },
+      rules: [
+        {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader']
+        }
+      ]
+    },
   plugins: [
     new MomentLocalesPlugin({
-      localesToKeep: [`es-us`]
+        localesToKeep: [`es-us`]
     })
   ]
 };

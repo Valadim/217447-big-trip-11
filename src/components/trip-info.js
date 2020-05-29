@@ -1,18 +1,27 @@
 import AbstractComponent from './abstract-component.js';
 import {parseDate} from '../utils/common.js';
 
-const getTripCities = (citiesArr, startDates) => {
+const getMiddleValue = (citiesArr) => {
   let str = ``;
-  if (citiesArr.length <= 2) {
-    str = `${startDates[0].city} &nbsp;&mdash;&nbsp; ${startDates[startDates.length - 1].city}`;
-  }
-  if (citiesArr.length === 3) {
-    str = `${citiesArr[0]} &nbsp;&mdash;&nbsp; ${citiesArr[1]} &nbsp;&mdash;&nbsp; ${citiesArr[citiesArr.length - 1]}`;
-  }
-  if (citiesArr.length > 3) {
-    str = `${startDates[0].city} &nbsp;&mdash;&nbsp; ... &nbsp;&mdash;&nbsp; ${startDates[startDates.length - 1].city}`;
+  const FIRST_ELEMENT = 1;
+  const MIN_ELEMENTS = 2;
+  const MAX_ELEMENTS = 3;
+  switch (true) {
+    case citiesArr.length <= MIN_ELEMENTS:
+      str = `&nbsp;&mdash;&nbsp;`;
+      break;
+    case citiesArr.length === MAX_ELEMENTS:
+      str = `&nbsp;&mdash;&nbsp; ${citiesArr[FIRST_ELEMENT]} &nbsp;&mdash;&nbsp;`;
+      break;
+    default:
+      str = `&nbsp;&mdash;&nbsp; ... &nbsp;&mdash;&nbsp;`;
+      break;
   }
   return str;
+};
+
+const getTripCities = (citiesArr, startDates) => {
+  return `${startDates[0].city} ${getMiddleValue(citiesArr)} ${startDates[startDates.length - 1].city}`;
 };
 
 export default class TripInfo extends AbstractComponent {

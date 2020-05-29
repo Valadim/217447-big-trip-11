@@ -1,10 +1,10 @@
 import AbstractComponent from './abstract-component.js';
-import {SORT_TYPE} from '../const.js';
+import {SortType} from '../const.js';
 
 export default class TripSort extends AbstractComponent {
   constructor() {
     super();
-    this._currentSortType = SORT_TYPE.DEFAULT;
+    this._currentSortType = SortType.DEFAULT;
   }
 
   getTemplate() {
@@ -18,7 +18,7 @@ export default class TripSort extends AbstractComponent {
             type="radio"
             name="trip-sort"
             value="sort-event"
-            data-sort-type="${SORT_TYPE.DEFAULT}"
+            data-sort-type="${SortType.DEFAULT}"
             >
           <label class="trip-sort__btn" for="sort-event">Event</label>
         </div>
@@ -30,7 +30,7 @@ export default class TripSort extends AbstractComponent {
             type="radio"
             name="trip-sort"
             value="sort-time"
-            data-sort-type="${SORT_TYPE.TIME}">
+            data-sort-type="${SortType.TIME}">
           <label class="trip-sort__btn" for="sort-time">
             Time
             <svg class="trip-sort__direction-icon" width="8" height="10" viewBox="0 0 8 10">
@@ -46,7 +46,7 @@ export default class TripSort extends AbstractComponent {
             type="radio"
             name="trip-sort"
             value="sort-price"
-            data-sort-type="${SORT_TYPE.PRICE}">
+            data-sort-type="${SortType.PRICE}">
           <label class="trip-sort__btn" for="sort-price">
             Price
             <svg class="trip-sort__direction-icon" width="8" height="10" viewBox="0 0 8 10">
@@ -60,10 +60,6 @@ export default class TripSort extends AbstractComponent {
     );
   }
 
-  getSortType() {
-    return this._currentSortType;
-  }
-
   setSortType(sortType) {
     this._currentSortType = sortType;
   }
@@ -73,13 +69,10 @@ export default class TripSort extends AbstractComponent {
       if (evt.target.tagName !== `INPUT`) {
         return;
       }
-
       const sortType = evt.target.dataset.sortType;
-
       if (this._currentSortType === sortType) {
         return;
       }
-
       this._currentSortType = sortType;
       handler(this._currentSortType);
     });

@@ -1,10 +1,9 @@
 import EventItemComponent from '../components/trip-event-item.js';
-import EventItemEditComponent from '../components/Trip-item-edit.js';
-import Point from '../models/point.js';
+import EventItemEditComponent from '../components/trip-item-edit.js';
+import Point from "../models/point.js";
 import {renderElement, replaceElement, remove, RenderPosition} from '../utils/render.js';
-import {POINT_MODE} from '../const.js';
+import {Mode} from '../const.js';
 import moment from 'moment';
-import {encode} from 'he';
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 
@@ -22,25 +21,24 @@ export const EmptyPoint = {
 };
 
 const parseFormData = (formData, destination, id) => {
-  const city = document.querySelector(`input[name="event-destination"]`).value;
+  const cityElement = document.querySelector(`input[name="event-destination"]`).value;
   const checkedOffers = [
     ...document.querySelectorAll(`.event__offer-checkbox:checked + label[for^="event"]`)
   ];
-
   return new Point({
     "id": id,
     "type": formData.get(`event-type`),
     "date_from": moment(formData.get(`event-start-time`), `DD/MM/YY HH:mm`).valueOf(),
     "date_to": moment(formData.get(`event-end-time`), `DD/MM/YY HH:mm`).valueOf(),
-    "base_price": parseInt(encode(formData.get(`event-price`)), 10),
+    "base_price": parseInt(formData.get(`event-price`), 10),
     "offers": checkedOffers.map((offer) => ({
       "title": offer.querySelector(`.event__offer-title`).textContent,
-      "price": Number(offer.querySelector(`.event__offer-price`).textContent)
+      "price": parseInt(offer.querySelector(`.event__offer-price`).textContent, 10)
     })),
     "destination": {
-      "description": destination[city].description,
-      "name": destination[city].name,
-      "pictures": destination[city].pictures
+      "description": destination[cityElement].description,
+      "name": destination[cityElement].name,
+      "pictures": destination[cityElement].pictures
     },
     "is_favorite": formData.get(`event-favorite`) === `on`
   });
@@ -54,32 +52,31 @@ export default class PointController {
     this._offersSet = offers;
     this._destinationsSet = destinations;
     this._eventItemComponent = null;
-    this._eventEditComponent = null;
-    this._mode = POINT_MODE.DEFAULT;
+    this._eventItemEditComponent = null;
+    this._mode = Mode.DEFAULT;
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
     this._submitValue = null;
   }
 
   render(point, mode) {
     const oldEventItemComponent = this._eventItemComponent;
-    const oldEvenItemEditComponent = this._eventEditComponent;
+    const oldEventItemEditComponent = this._eventItemEditComponent;
     this._mode = mode;
-
     this._eventItemComponent = new EventItemComponent(point);
-    this._eventEditComponent = new EventItemEditComponent(point, this._offersSet, this._destinationsSet);
+    this._eventItemEditComponent = new EventItemEditComponent(point, this._offersSet, this._destinationsSet);
 
     this._eventItemComponent.setClickHandler(() => {
       this._replaceWaypointToWaypointEdit();
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
 
-    this._eventEditComponent.setClickHandler(() => {
+    this._eventItemEditComponent.setClickHandler(() => {
       this._replaceWaypointEditToWaypoint();
     });
 
-    this._eventEditComponent.setSubmitClickHandler((evt)=> {
+    this._eventItemEditComponent.setSubmitClickHandler((evt)=> {
       evt.preventDefault();
-      const formData = this._eventEditComponent.getData();
+      const formData = this._eventItemEditComponent.getData();
       this._submitValue = evt.target.value;
       let pointData = null;
       if (this._submitValue === `on`) {
@@ -87,29 +84,29 @@ export default class PointController {
         pointData.isFavorite = !pointData.isFavorite;
       } else {
         pointData = parseFormData(formData, this._destinationsSet, point.id);
-        this._eventEditComponent.setData({
+        this._eventItemEditComponent.setData({
           saveButtonText: `Saving...`,
         });
-        this._eventEditComponent.disableForm();
+        this._eventItemEditComponent.disableForm();
       }
-      this._eventEditComponent.hideBorder();
+      this._eventItemEditComponent.hideBorder();
       this._onDataChange(this, point, pointData);
     });
 
-    this._eventEditComponent.setDeleteButtonClickHandler(() => {
-      this._eventEditComponent.setData({
+    this._eventItemEditComponent.setDeleteButtonClickHandler(() => {
+      this._eventItemEditComponent.setData({
         deleteButtonText: `Deleting...`,
       });
-      this._eventEditComponent.hideBorder();
-      this._eventEditComponent.disableForm();
+      this._eventItemEditComponent.hideBorder();
+      this._eventItemEditComponent.disableForm();
       this._onDataChange(this, point, null);
     });
 
     switch (mode) {
-      case POINT_MODE.DEFAULT:
-        if (oldEvenItemEditComponent && oldEventItemComponent) {
+      case Mode.DEFAULT:
+        if (oldEventItemEditComponent && oldEventItemComponent) {
           replaceElement(this._eventItemComponent, oldEventItemComponent);
-          replaceElement(this._eventEditComponent, oldEvenItemEditComponent);
+          replaceElement(this._eventItemEditComponent, oldEventItemEditComponent);
           this._replaceWaypointEditToWaypoint();
         } else {
           renderElement(
@@ -118,20 +115,20 @@ export default class PointController {
           );
         }
         break;
-      case POINT_MODE.EDIT:
-        if (oldEvenItemEditComponent) {
-          replaceElement(this._eventEditComponent, oldEvenItemEditComponent);
+      case Mode.EDIT:
+        if (oldEventItemEditComponent) {
+          replaceElement(this._eventItemEditComponent, oldEventItemEditComponent);
         }
         break;
-      case POINT_MODE.ADDING:
-        if (oldEvenItemEditComponent && oldEventItemComponent) {
+      case Mode.ADDING:
+        if (oldEventItemEditComponent && oldEventItemComponent) {
           remove(oldEventItemComponent);
-          remove(oldEvenItemEditComponent);
+          remove(oldEventItemEditComponent);
         }
         document.addEventListener(`keydown`, this._onEscKeyDown);
         renderElement(
             this._container.getElement(),
-            this._eventEditComponent,
+            this._eventItemEditComponent,
             RenderPosition.AFTERBEGIN
         );
         break;
@@ -139,38 +136,36 @@ export default class PointController {
   }
 
   shake() {
-    this._eventEditComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
-    this._eventItemComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
-    setTimeout(() => {
-      this._eventEditComponent.getElement().style.animation = ``;
-      this._eventItemComponent.getElement().style.animation = ``;
+    this._shakeDuration = SHAKE_ANIMATION_TIMEOUT / 1000;
+    this._eventItemEditComponent.getElement().style.animation = `shake ${this._shakeDuration}s`;
+    this._eventItemComponent.getElement().style.animation = `shake ${this._shakeDuration}s`;
 
-      this._eventEditComponent.setData({
-        saveButtonText: `Save`,
-        deleteButtonText: `Delete`,
-      });
+    setTimeout(() => {
+      this._eventItemEditComponent.getElement().style.animation = ``;
+      this._eventItemComponent.getElement().style.animation = ``;
+      this._eventItemEditComponent.setData({saveButtonText: `Save`, deleteButtonText: `Delete`});
     }, SHAKE_ANIMATION_TIMEOUT);
 
-    setTimeout(() => this._eventEditComponent.showBorder(), SHAKE_ANIMATION_TIMEOUT);
+    setTimeout(() => this._eventItemEditComponent.showBorder(), SHAKE_ANIMATION_TIMEOUT);
   }
 
   _replaceWaypointToWaypointEdit() {
     this._onViewChange();
-    replaceElement(this._eventEditComponent, this._eventItemComponent);
-    this._mode = POINT_MODE.EDIT;
+    replaceElement(this._eventItemEditComponent, this._eventItemComponent);
+    this._mode = Mode.EDIT;
   }
 
   _replaceWaypointEditToWaypoint() {
-    this._eventEditComponent.reset();
+    this._eventItemEditComponent.reset();
     document.removeEventListener(`keydown`, this._onEscKeyDown);
-    replaceElement(this._eventItemComponent, this._eventEditComponent);
-    this._mode = POINT_MODE.DEFAULT;
+    replaceElement(this._eventItemComponent, this._eventItemEditComponent);
+    this._mode = Mode.DEFAULT;
   }
 
   _onEscKeyDown(evt) {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
     if (isEscKey) {
-      if (this._mode === POINT_MODE.ADDING) {
+      if (this._mode === Mode.ADDING) {
         this._onDataChange(this, EmptyPoint, null);
       }
       this._replaceWaypointEditToWaypoint();
@@ -178,13 +173,13 @@ export default class PointController {
   }
 
   setDefaultView() {
-    if (this._mode !== POINT_MODE.DEFAULT) {
+    if (this._mode !== Mode.DEFAULT) {
       this._replaceWaypointEditToWaypoint();
     }
   }
 
   destroy() {
-    remove(this._eventEditComponent);
+    remove(this._eventItemEditComponent);
     remove(this._eventItemComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
