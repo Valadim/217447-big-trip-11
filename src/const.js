@@ -27,7 +27,7 @@ const ACTIVITY_TYPES = [
   `restaurant`,
 ];
 
-const DestinationUnknown = `We know nothing about this place.
+const DESTINATION_UNKNOWN = `We know nothing about this place.
   Please select a destination from the dropdown list.`;
 
 const MenuItems = [
@@ -67,7 +67,7 @@ export {
   FilterType,
   SortType,
   ACTIVITY_TYPES,
-  DestinationUnknown,
+  DESTINATION_UNKNOWN,
   MenuItems,
   STORE_NAME,
   TRANSFER_TYPES,

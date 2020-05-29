@@ -1,5 +1,5 @@
 import AbstractSmartComponent from './abstract-smart-component.js';
-import {Mode, TRANSFER_TYPES, ACTIVITY_TYPES, DestinationUnknown} from '../const.js';
+import {Mode, TRANSFER_TYPES, ACTIVITY_TYPES, DESTINATION_UNKNOWN} from '../const.js';
 import {capitalizeFirstLetter} from '../utils/common.js';
 import flatpickr from 'flatpickr';
 import {encode} from 'he';
@@ -376,7 +376,7 @@ export default class TripItemEdit extends AbstractSmartComponent {
             this._description = this._destinationsSet[this._smartCity].description;
             this._photos = this._destinationsSet[this._smartCity].pictures;
           } else {
-            this._description = DestinationUnknown;
+            this._description = DESTINATION_UNKNOWN;
             this._photos = [];
           }
         }

@@ -3,12 +3,15 @@ import {parseDate} from '../utils/common.js';
 
 const getMiddleValue = (citiesArr) => {
   let str = ``;
+  const FIRST_ELEMENT = 1;
+  const MIN_ELEMENTS = 2;
+  const MAX_ELEMENTS = 3;
   switch (true) {
-    case citiesArr.length <= 2:
+    case citiesArr.length <= MIN_ELEMENTS:
       str = `&nbsp;&mdash;&nbsp;`;
       break;
-    case citiesArr.length === 3:
-      str = `&nbsp;&mdash;&nbsp; ${citiesArr[1]} &nbsp;&mdash;&nbsp;`;
+    case citiesArr.length === MAX_ELEMENTS:
+      str = `&nbsp;&mdash;&nbsp; ${citiesArr[FIRST_ELEMENT]} &nbsp;&mdash;&nbsp;`;
       break;
     default:
       str = `&nbsp;&mdash;&nbsp; ... &nbsp;&mdash;&nbsp;`;

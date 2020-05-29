@@ -117,9 +117,9 @@ export default class TripController {
     renderElement(this._eventElement, this._sortComponent, RenderPosition.AFTERBEGIN);
     this._renderNoWaypoint();
     this._sortComponent.setSortTypeChangeHandler((sortType) => {
-      this._sortPoints(sortType);
+      this.sortPoints(sortType);
     });
-    this._sortPoints(SortType.DEFAULT);
+    this.sortPoints(SortType.DEFAULT);
     getFullPrice(this._pointsModel.getPointsAll(), this._offersSet);
   }
 
@@ -151,7 +151,7 @@ export default class TripController {
     getFullPrice(this._pointsModel.getPointsAll(), this._offersSet);
   }
 
-  _sortPoints(sortType) {
+  sortPoints(sortType) {
     let sortedPoints = [];
     this._isDefaultSort = false;
 
@@ -289,6 +289,6 @@ export default class TripController {
     this._updatePoints();
     this._sortComponent.setSortType(this._currentSortType);
     this._checkSortType(this._currentSortType);
-    this._sortPoints(this._currentSortType);
+    this.sortPoints(this._currentSortType);
   }
 }
