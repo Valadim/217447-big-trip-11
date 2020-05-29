@@ -1,5 +1,5 @@
 import AbstractSmartComponent from './abstract-smart-component.js';
-import {POINT_TYPE_PRE_TEXT, POINT_MODE, TRANSFER_TYPES, ACTIVITY_TYPES, DESTINATION_UKNOWN} from '../const.js';
+import {Mode, TRANSFER_TYPES, ACTIVITY_TYPES, DestinationUnknown} from '../const.js';
 import {capitalizeFirstLetter} from '../utils/common.js';
 import flatpickr from 'flatpickr';
 import {encode} from 'he';
@@ -90,7 +90,7 @@ export default class TripItemEdit extends AbstractSmartComponent {
 
             <div class="event__field-group  event__field-group--destination">
               <label class="event__label  event__type-output" for="event-destination-${this._id}">
-                ${capitalizeFirstLetter(this._type)} ${POINT_TYPE_PRE_TEXT[this._type]}
+                ${capitalizeFirstLetter(this._type)} ${TRANSFER_TYPES.includes(this._type) ? `to` : `in`}
               </label>
               <input class="event__input  event__input--destination" id="event-destination-${this._id}" type="text" name="event-destination" value="${this._smartCity ? this._smartCity : this._city}" list="destination-list-${this._id}" required>
               <datalist id="destination-list-${this._id}">
@@ -193,7 +193,7 @@ export default class TripItemEdit extends AbstractSmartComponent {
                       `<img
                         class="event__photo"
                         src="${photo.src}"
-                        alt="Event photo"
+                        alt="${photo.description}"
                       />`
                     );
                   })
@@ -245,16 +245,17 @@ export default class TripItemEdit extends AbstractSmartComponent {
   }
 
   setSubmitClickHandler(handler) {
-    const form = this._mode === POINT_MODE.ADDING
+    const formElement = this._mode === Mode.ADDING
       ? this.getElement()
       : this.getElement().querySelector(`form`);
+    const checkboxElement = formElement.querySelector(`.event__favorite-checkbox`);
 
-    if (this.getElement().querySelector(`.event__favorite-checkbox`)) {
-      form.querySelector(`.event__favorite-checkbox`).addEventListener(`click`, (evt) => {
+    if (checkboxElement) {
+      checkboxElement.addEventListener(`click`, (evt) => {
         handler(evt);
       });
     }
-    form.addEventListener(`submit`, handler);
+    formElement.addEventListener(`submit`, handler);
     this._validate();
     this._submitClickHandler = handler;
   }
@@ -273,8 +274,8 @@ export default class TripItemEdit extends AbstractSmartComponent {
   }
 
   getData() {
-    const form = this.getElement().querySelector(`form`);
-    const formData = new FormData(form);
+    const formElement = this.getElement().querySelector(`form`);
+    const formData = new FormData(formElement);
 
     return formData;
   }
@@ -337,10 +338,7 @@ export default class TripItemEdit extends AbstractSmartComponent {
     this._flatpickrEnd = flatpickr(endDateElement,
         Object.assign({}, flatpickrOpt, {
           defaultDate: this._endDate || `today`,
-          minDate: this._endDate || `today`,
-          onChange(selectedDates) {
-            self._flatpickrStart.set(`maxDate`, selectedDates[0]);
-          },
+          minDate: this._startDate || `today`,
         })
     );
   }
@@ -369,13 +367,16 @@ export default class TripItemEdit extends AbstractSmartComponent {
     element.querySelector(`.event__input--destination`)
       .addEventListener(`change`, (evt) => {
         this._smartCity = encode(evt.target.value);
-        this._description = (this._smartCity === ``) ? `` : this._photos = [];
+        if (this._smartCity === ``) {
+          this._description = ``;
+          this._photos = [];
+        }
         if (this._smartCity !== ``) {
           if (Object.keys(this._destinationsSet).includes(this._smartCity)) {
             this._description = this._destinationsSet[this._smartCity].description;
             this._photos = this._destinationsSet[this._smartCity].pictures;
           } else {
-            this._description = DESTINATION_UKNOWN;
+            this._description = DestinationUnknown;
             this._photos = [];
           }
         }
@@ -404,11 +405,11 @@ export default class TripItemEdit extends AbstractSmartComponent {
     element.querySelector(`.event__input--price`)
     .addEventListener(`input`, (evt) => {
       const outputElement = element.querySelector(`.event__input--price`);
-      this._smartPrice = encode(evt.target.value);
-      if (!this._smartPrice.match(/[^0-9]/g)) {
-        return;
+      this._smartPrice = evt.target.value;
+      const reg = /\D+/g;
+      if (this._smartPrice.match(reg)) {
+        outputElement.value = this._smartPrice.replace(reg, ``);
       }
-      outputElement.value = this._smartPrice.replace((/[^0-9]/g), ``);
     });
 
     if (!this._isNew) {
