@@ -3,7 +3,7 @@ import {URL} from '../const.js';
 
 const AccessData = {
   END_POINT: `https://11.ecmascript.pages.academy/big-trip`,
-  AUTHORIZATION: `Basic rq0z3ghgwmkvnjl`
+  AUTHORIZATION: `Basic rq0z4ghgwmkvnjl`
 };
 
 const HttpCode = {

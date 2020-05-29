@@ -43,8 +43,8 @@ newPointElement.addEventListener(`click`, () => {
     tripController.show();
   }
   menuComponent.setSelectedItem(MenuItem.TABLE);
-  filterController._onFilterChange(FilterType.EVERYTHING);
-  tripController._sortPoints(SortType.DEFAULT);
+  filterController.onFilterChange(FilterType.EVERYTHING);
+  tripController.sortPoints(SortType.DEFAULT);
   tripController.createPoint();
 });
 

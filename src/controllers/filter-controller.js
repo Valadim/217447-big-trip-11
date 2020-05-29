@@ -8,7 +8,7 @@ export default class FilterController {
     this._pointsModel = pointsModel;
     this._activeFilterType = FilterType.EVERYTHING;
     this._filterComponent = null;
-    this._onFilterChange = this._onFilterChange.bind(this);
+    this.onFilterChange = this.onFilterChange.bind(this);
   }
 
   render() {
@@ -22,7 +22,7 @@ export default class FilterController {
     });
     const oldComponent = this._filterComponent;
     this._filterComponent = new FilterComponent(filters);
-    this._filterComponent.setFilterChangeHandler(this._onFilterChange);
+    this._filterComponent.setFilterChangeHandler(this.onFilterChange);
     if (oldComponent) {
       replaceElement(this._filterComponent, oldComponent);
     } else {
@@ -30,7 +30,7 @@ export default class FilterController {
     }
   }
 
-  _onFilterChange(filterType) {
+  onFilterChange(filterType) {
     this._activeFilterType = filterType;
     this._pointsModel.setFilter(filterType);
   }
