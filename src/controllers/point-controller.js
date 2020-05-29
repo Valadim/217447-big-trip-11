@@ -136,8 +136,9 @@ export default class PointController {
   }
 
   shake() {
-    this._eventItemEditComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
-    this._eventItemComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    this._shakeDuration = SHAKE_ANIMATION_TIMEOUT / 1000;
+    this._eventItemEditComponent.getElement().style.animation = `shake ${this._shakeDuration}s`;
+    this._eventItemComponent.getElement().style.animation = `shake ${this._shakeDuration}s`;
 
     setTimeout(() => {
       this._eventItemEditComponent.getElement().style.animation = ``;
