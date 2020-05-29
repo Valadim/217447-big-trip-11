@@ -1,10 +1,6 @@
 import AbstractComponent from './abstract-component.js';
 
 export default class TripCost extends AbstractComponent {
-  constructor(points) {
-    super();
-    this._points = points;
-  }
 
   getTemplate() {
     return (

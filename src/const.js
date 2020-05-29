@@ -1,49 +1,36 @@
-export const MENU_ITEM = {
+const MenuItem = {
   TABLE: `table`,
-  STATS: `stats`
+  STATS: `stats`,
 };
 
-export const POINT_MODE = {
+const Mode = {
   DEFAULT: `default`,
   EDIT: `edit`,
-  ADDING: `adding`
+  ADDING: `adding`,
 };
 
-export const FILTER_TYPE = {
+const FilterType = {
   EVERYTHING: `everything`,
   FUTURE: `future`,
-  PAST: `past`
+  PAST: `past`,
 };
 
-export const POINT_TYPE_PRE_TEXT = {
-  "taxi": `to`,
-  "bus": `to`,
-  "train": `to`,
-  "ship": `to`,
-  "transport": `to`,
-  "drive": `to`,
-  "flight": `to`,
-  "check-in": `in`,
-  "sightseeing": `in`,
-  "restaurant": `in`
-};
-
-export const SORT_TYPE = {
+const SortType = {
   DEFAULT: `sort-event`,
   TIME: `sort-time`,
   PRICE: `sort-price`,
 };
 
-export const ACTIVITY_TYPES = [
+const ACTIVITY_TYPES = [
   `check-in`,
   `sightseeing`,
-  `restaurant`
+  `restaurant`,
 ];
 
-export const DESTINATION_UKNOWN = `We know nothing about this place.
+const DestinationUnknown = `We know nothing about this place.
   Please select a destination from the dropdown list.`;
 
-export const MENU_ITEMS = [
+const MenuItems = [
   {
     name: `table`,
     selected: true,
@@ -54,7 +41,11 @@ export const MENU_ITEMS = [
   },
 ];
 
-export const TRANSFER_TYPES = [
+const STORE_PREFIX = `bigtrip-localstorage`;
+const STORE_VER = `v1`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+
+const TRANSFER_TYPES = [
   `taxi`,
   `bus`,
   `train`,
@@ -63,3 +54,22 @@ export const TRANSFER_TYPES = [
   `drive`,
   `flight`,
 ];
+
+const URL = {
+  POINTS: `points`,
+  DESTINATIONS: `destinations`,
+  OFFERS: `offers`,
+};
+
+export {
+  MenuItem,
+  Mode,
+  FilterType,
+  SortType,
+  ACTIVITY_TYPES,
+  DestinationUnknown,
+  MenuItems,
+  STORE_NAME,
+  TRANSFER_TYPES,
+  URL,
+};

@@ -1,83 +1,98 @@
-import API from './api.js';
+import API from './api/index.js';
+import Provider from "./api/provider.js";
+import Store from "./api/store.js";
 import FilterController from './controllers/filter-controller.js';
 import MenuComponent from './components/menu.js';
-import StatsComponent from './components/stats.js';
+import StatisticsComponent from './components/statistics.js';
 import TripDaysComponent from './components/trip-days.js';
 import TripController from './controllers/trip-controller.js';
 import TripMainInfoComponent from './components/trip-main-info.js';
 import TripPointsLoadind from './components/trip-points-loading.js';
 import PointsModel from './models/points.js';
 import {renderElement, RenderPosition, remove} from './utils/render.js';
-import {MENU_ITEM, MENU_ITEMS, FILTER_TYPE, SORT_TYPE} from './const.js';
-
-const api = new API();
-const pointsModel = new PointsModel();
+import {FilterType, MenuItem, SortType, MenuItems, STORE_NAME} from './const.js';
 
 const headerElement = document.querySelector(`.trip-main`);
 const menuElement = document.querySelector(`.trip-controls`);
 const eventElement = document.querySelector(`.trip-events`);
 
-const menuComponent = new MenuComponent(MENU_ITEMS);
+const api = new API();
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
+const pointsModel = new PointsModel();
+const menuComponent = new MenuComponent(MenuItems);
 const tripDaysComponent = new TripDaysComponent();
 const filterController = new FilterController(menuElement, pointsModel);
-const statsComponent = new StatsComponent(pointsModel);
-const tripController = new TripController(tripDaysComponent, pointsModel, api, filterController);
-let tripPointsLoading = new TripPointsLoadind();
+const statisticsComponent = new StatisticsComponent(pointsModel);
+const tripController = new TripController(tripDaysComponent, pointsModel, apiWithProvider, filterController);
+const tripPointsLoading = new TripPointsLoadind();
 
 renderElement(menuElement, menuComponent);
 renderElement(eventElement, tripDaysComponent);
 renderElement(headerElement, new TripMainInfoComponent(), RenderPosition.AFTERBEGIN);
-renderElement(eventElement, statsComponent, RenderPosition.BEFOREEND);
+renderElement(eventElement, statisticsComponent);
 renderElement(eventElement, tripPointsLoading);
 
-statsComponent.hide();
+statisticsComponent.hide();
 
 const newPointElement = document.querySelector(`.trip-main__event-add-btn`);
 newPointElement.disabled = true;
 newPointElement.addEventListener(`click`, () => {
-  if (statsComponent) {
-    statsComponent.hide();
+  if (statisticsComponent) {
+    statisticsComponent.hide();
     tripController.show();
   }
-  menuComponent.setSelectedItem(MENU_ITEM.TABLE);
-  filterController._onFilterChange(FILTER_TYPE.EVERYTHING);
-  tripController._sortPoints(SORT_TYPE.DEFAULT);
+  menuComponent.setSelectedItem(MenuItem.TABLE);
+  filterController._onFilterChange(FilterType.EVERYTHING);
+  tripController._sortPoints(SortType.DEFAULT);
   tripController.createPoint();
 });
 
 menuComponent.setChangeHandler((menuItem) => {
   switch (menuItem) {
-    case MENU_ITEM.TABLE:
-      menuComponent.setSelectedItem(MENU_ITEM.TABLE);
-      statsComponent.hide();
-      tripController.show();
-      if (tripPointsLoading && tripController._noWaypointComponent) {
-        remove(tripController._noWaypointComponent);
-        renderElement(eventElement, tripPointsLoading);
+    case MenuItem.TABLE:
+      menuComponent.setSelectedItem(MenuItem.TABLE);
+      if (tripPointsLoading) {
+        statisticsComponent.hide();
+        tripPointsLoading.show();
+      }
+      if (tripPointsLoading._element === null && !tripController._noWaypointComponent) {
+        statisticsComponent.hide();
+        tripController.show();
       }
       break;
-    case MENU_ITEM.STATS:
-      menuComponent.setSelectedItem(MENU_ITEM.STATS);
-      statsComponent.show();
+    case MenuItem.STATS:
+      menuComponent.setSelectedItem(MenuItem.STATS);
+      statisticsComponent.show();
       tripController.hide();
-      if (tripPointsLoading) {
-        remove(tripPointsLoading);
-      }
+      tripPointsLoading.hide();
       break;
   }
 });
 
 Promise.all([
-  api.getPoints(),
-  api.getOffers(),
-  api.getDestinations()
+  apiWithProvider.getPoints(),
+  apiWithProvider.getOffers(),
+  apiWithProvider.getDestinations()
 ]).then(([points, offers, destinations]) => {
   pointsModel.setPoints(points);
   pointsModel.setOffers(offers);
   pointsModel.setDestinations(destinations);
   remove(tripPointsLoading);
-  tripPointsLoading = null;
   tripController.render();
   filterController.render();
   newPointElement.disabled = false;
+});
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`);
+});
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` ⚠️ offline`, ``);
+  apiWithProvider.sync();
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` ⚠️ offline`;
 });
